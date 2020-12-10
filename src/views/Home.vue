@@ -15,7 +15,7 @@
           </v-list>
           <v-card-actions>
             <v-row justify="end" class="ma-0 hidden-sm-and-down">
-              <v-btn dark>
+              <v-btn dark @click="$router.push('/login')">
                   Gerencie sua escola
                 <v-icon right>mdi-school</v-icon>
               </v-btn>
