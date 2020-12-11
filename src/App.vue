@@ -1,6 +1,5 @@
 <template>
   <v-app class="app">
-    <Toolbar v-if="$route.path != '/'"/>
     <router-view />
   </v-app>
 </template>
@@ -10,13 +9,3 @@
   overflow: hidden;
 }
 </style>
-
-<script>
-import Toolbar from '@/components/Toolbar.vue'
-
-export default {
-  components:{
-    Toolbar
-  }
-}
-</script>

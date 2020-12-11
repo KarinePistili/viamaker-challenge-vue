@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <Toolbar v-if="$route.path != '/'" />
     <v-container fill-height>
       <v-row justify="center">
         <v-col cols="12" lg="6" xl="6" md="6">
@@ -10,7 +11,7 @@
             </v-card-text>
             <v-form ref="login">
               <v-text-field
-                v-model="emailLogin"
+                v-model="user.email"
                 outlined
                 class="pl-4 pr-4"
                 prepend-inner-icon="mdi-email"
@@ -18,7 +19,7 @@
                 :rules="rules.email"
               ></v-text-field>
               <v-text-field
-                v-model="password"
+                v-model="user.password"
                 outlined
                 class="pl-4 pr-4"
                 prepend-inner-icon="mdi-eye"
@@ -73,29 +74,33 @@
       </v-row>
     </v-container>
     <RecoverPassword v-model="openDialog" />
-    <AlertDialog v-model="alertDialog" :title="title" :message="message"/>
+    <AlertDialog v-model="alertDialog" :title="title" :message="message" />
   </div>
 </template>
 
 <script>
 import RecoverPassword from "@/components/RecoverPassword.vue";
-import AlertDialog from "@/components/AlertDialog.vue"
+import AlertDialog from "@/components/AlertDialog.vue";
+import Toolbar from "@/components/Toolbar.vue";
 
 export default {
   components: {
     RecoverPassword,
-    AlertDialog
+    AlertDialog,
+    Toolbar,
   },
   data() {
     return {
       openDialog: false,
       alertDialog: false,
-      emailLogin: "",
       emailQuestion: "",
-      password: "",
       question: "",
       message: "",
-      title:"",
+      title: "",
+      user: {
+        email: "",
+        password: "",
+      },
       rules: {
         email: [
           (v) => !!v || "E-mail é obrigatório",
@@ -117,17 +122,22 @@ export default {
     logIn() {
       if (this.$refs.login.validate()) {
         console.log("login valid");
+        this.$store.dispatch("signin", this.user).th;
+
+        // for now it will always go to the super admin dashboard
+        this.$router.push("/super-dashboard");
       }
     },
     sendQuestion() {
-      if( this.$refs.question.validate()){
-        console.log("send question")
-        this.title = 'Mensagem Enviada!'
-        this.message = 'Fique de olho na sua caixa de entrada que entraremos em contato com você rapidinho.'
-        this.alertDialog = true
-        this.$refs.question.reset()
-        this.emailQuestion = ''
-        this.question = ''
+      if (this.$refs.question.validate()) {
+        console.log("send question");
+        this.title = "Mensagem Enviada!";
+        this.message =
+          "Fique de olho na sua caixa de entrada que entraremos em contato com você rapidinho.";
+        this.alertDialog = true;
+        this.$refs.question.reset();
+        this.emailQuestion = "";
+        this.question = "";
       }
     },
   },
