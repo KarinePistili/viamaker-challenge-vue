@@ -4,6 +4,8 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import SuperDashboard from '@/views/SuperAdminDashboard.vue'
 import SchoolDashboard from '@/views/SchoolDashboard.vue'
+import ManageSchools from '@/views/ManageSchools.vue'
+import SchoolClass from '@/views/SchoolClass.vue'
 
 Vue.use(VueRouter)
 
@@ -24,9 +26,19 @@ const routes = [
     component: SuperDashboard
   },
   {
-    path: '/school-dashboard',
+    path: '/school-dashboard/:schoolid',
     name: 'SchoolDashboard',
     component: SchoolDashboard
+  },
+  {
+    path: '/super-dashboard/schools',
+    name: 'ManageSchools',
+    component: ManageSchools
+  },
+  {
+    path: '/school-dashboard/:schoolid/class/:classid',
+    name: 'ManageClass',
+    component: SchoolClass
   }
 ]
 

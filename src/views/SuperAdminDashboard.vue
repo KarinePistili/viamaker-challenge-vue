@@ -13,7 +13,7 @@
               height="100%"
               :elevation="hover ? 16 : 2"
               :class="{ 'on-hover': hover }"
-              @click="manage"
+              @click="manage(action.action)"
             >
               <v-img height="200" :src="action.img"></v-img>
               <v-card-title>{{ action.title }}</v-card-title>
@@ -57,8 +57,10 @@ export default {
     },
   },
   methods: {
-    manage() {
+    manage(action) {
       console.log("manage");
+      if(action == 'manage-schools')
+        this.$router.push('/super-dashboard/schools')
     },
   },
 };
