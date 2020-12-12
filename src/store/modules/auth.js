@@ -4,15 +4,11 @@ export default {
 
     state: {
         user: null,
-        loading: false
     },
     mutations: {
         setUser(state, payload) {
             state.user = payload
         },
-        setLoading(state, payload) {
-            state.loading = payload
-        }
     },
     actions: {
         async signin({ commit }, payload) {

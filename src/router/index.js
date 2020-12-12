@@ -39,7 +39,7 @@ const routes = [
     path: '/school-dashboard/:schoolid/class/:classid',
     name: 'ManageClass',
     component: SchoolClass
-  }
+  },
 ]
 
 const router = new VueRouter({

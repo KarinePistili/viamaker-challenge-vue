@@ -1,9 +1,13 @@
+import firebase from 'firebase'
+
 export default {
-    createObject: async () => {
-        // TO DO
+    createObject: async (payload) => {
+        const db = firebase.firestore();
+        var collectionRef = db.collection(payload.collection);
+        return collectionRef.add(payload.data)    
     },
     getObjectById: async () => {
-        // TO DO
+        // TO DO   
     },
     deleteDocument: async () => {
         // TO DO
@@ -11,8 +15,10 @@ export default {
     updateObject: async () => {
         // TO DO
     },
-    getObjects: async () => {
-        // TO DO
+    getObjects: async (payload) => {
+        const db = firebase.firestore();
+        var collectionRef = db.collection(payload.collection);
+        return collectionRef.get()    
     },
     queryObjects: async () =>{
         // TO DO

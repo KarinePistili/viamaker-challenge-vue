@@ -10,6 +10,7 @@
         <v-btn
           color="success"
           class="mr-2 mt-2"
+          @click="newSchool = true"
           >adicionar escola
           <v-icon right>mdi-plus</v-icon>
         </v-btn>
@@ -41,44 +42,41 @@
         </v-data-table>
       </v-card>
     </v-container>
+    <school-form
+      v-model="newSchool"
+      :school="{}"
+      :title="'Nova Escola'"
+      :newSchool="true"
+    />
   </div>
 </template>
 
 <script>
 import Toolbar from "@/components/Toolbar.vue";
+import SchoolForm from "@/components/SchoolForm.vue";
+
 
 export default {
   components: {
     Toolbar,
+    SchoolForm
   },
   data() {
     return {
       search: "",
+      newSchool: false,
       headers: [
         { text: "Nome", value: "name" },
         { text: "CNPJ", value: "cnpj" },
-        { text: "Turmas", value: "qtTurmas" },
+        { text: "Turmas", value: "qtClasses" },
         { text: "", value: "actions", align: "end", sortable: false },
-      ],
-      schools: [
-        {
-          id: '001',
-          name: "Escola 01",
-          cnpj: "123456789",
-          qtTurmas: 3,
-          turmas: ["001", "002", "003"],
-        },
-        {
-          id: '002',
-          name: "Escola 02",
-          cnpj: "123456789",
-          qtTurmas: 4,
-          turmas: ["001", "002", "003", "004"],
-        },
       ],
     };
   },
   computed: {
+    schools(){
+      return this.$store.state.school.schools
+    },
     filteredSchools() {
       return this.schools.filter((s) => {
         return (
@@ -93,5 +91,8 @@ export default {
       this.$router.push(`/school-dashboard/${school.id}`)
     },
   },
+  created(){
+    this.$store.dispatch('getSchools')
+  }
 };
 </script>
