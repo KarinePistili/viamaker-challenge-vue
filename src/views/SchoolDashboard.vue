@@ -7,22 +7,15 @@
       </v-row>
       <v-divider />
       <v-row class="ma-0 pt-8">
-        <v-btn
-          color="success"
-          class="mr-2 mt-2"
-          
+        <v-btn color="success" class="mr-2 mt-2"
           >adicionar turma
           <v-icon right>mdi-plus</v-icon>
         </v-btn>
-        <v-btn
-          color="blue"
-          class="mt-2 mr-2"
-          dark
-          @click="editSchool = true"
+        <v-btn color="blue" class="mt-2 mr-2" dark @click="editSchool = true"
           >editar escola
           <v-icon right>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn color="red" class="mt-2" dark 
+        <v-btn color="red" class="mt-2" dark @click="deleteSchool"
           >apagar escola
           <v-icon right>mdi-delete</v-icon>
         </v-btn>
@@ -60,7 +53,6 @@
     </v-container>
     <school-form
       v-model="editSchool"
-      :school="school"
       :title="'Editar Escola'"
       :newSchool="false"
     />
@@ -74,12 +66,12 @@ import SchoolForm from "@/components/SchoolForm.vue";
 export default {
   components: {
     Toolbar,
-    SchoolForm
+    SchoolForm,
   },
   data() {
     return {
       search: "",
-      editSchool:false,
+      editSchool: false,
       headers: [
         { text: "Nome", value: "name" },
         { text: "Alunos", value: "qtStudents" },
@@ -93,9 +85,9 @@ export default {
     //     return c.name.toLowerCase().includes(this.search.toLowerCase());
     //   });
     // },
-    school(){
-      return this.$store.state.school.school
-    }
+    school() {
+      return this.$store.state.school.school;
+    },
   },
   methods: {
     manageClass(schoolClass) {
@@ -103,9 +95,19 @@ export default {
         `/school-dashboard/${this.school.id}/class/${schoolClass.id}`
       );
     },
+    deleteSchool() {
+      if (
+        confirm(
+          "Você tem certeza que deseja apagar essa escola? Esta ação não pode ser desfeita"
+        )
+      ) {
+        this.$store.dispatch("deleteSchool", this.$route.params.schoolid);
+        this.$router.go(-1)
+      }
+    },
   },
-  created(){
-    this.$store.dispatch('getSchoolById',this.$route.params.schoolid )
-  }
+  created() {
+    this.$store.dispatch("getSchoolById", this.$route.params.schoolid);
+  },
 };
 </script>

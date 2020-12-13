@@ -44,7 +44,6 @@
     </v-container>
     <school-form
       v-model="newSchool"
-      :school="{}"
       :title="'Nova Escola'"
       :newSchool="true"
     />

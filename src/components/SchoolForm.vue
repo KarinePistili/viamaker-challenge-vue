@@ -7,7 +7,7 @@
     >
       <v-card class="pa-6">
         <v-row justify="end" class="ma-0">
-          <v-btn @click="show = false" icon>
+          <v-btn @click="resetModel" icon>
             <v-icon color="red">mdi-close</v-icon>
           </v-btn>
         </v-row>
@@ -20,7 +20,7 @@
               outlined
               placeholder="Nome"
               :rules="rules.name"
-              v-model="schoolModel.name"
+              v-model="school.name"
             ></v-text-field>
           </v-row>
           <v-row class="ma-0 pl-4 pr-4">
@@ -28,12 +28,12 @@
               outlined
               placeholder="CNPJ"
               :rules="rules.cnpj"
-              v-model="schoolModel.cnpj"
+              v-model="school.cnpj"
             ></v-text-field>
           </v-row>
         </v-form>
         <v-row class="ma-0 pl-4 pr-4" justify="space-between">
-          <v-btn color="red" text @click="show = false">cancelar</v-btn>
+          <v-btn color="red" text @click="resetModel">cancelar</v-btn>
           <v-btn color="success" @click="createSchool()">salvar</v-btn>
         </v-row>
       </v-card>
@@ -42,9 +42,8 @@
 </template>
 
 <script>
-
 export default {
-  props: ["value", "school", "title", "newSchool"],
+  props: ["value", "title", "newSchool"],
   data() {
     return {
       schoolModel: {
@@ -68,35 +67,39 @@ export default {
         this.$emit("input", value);
       },
     },
+    school() {
+      if (!this.newSchool) {
+        return Object.assign({}, this.$store.state.school.school);
+      }
+      return this.schoolModel
+    },
   },
   methods: {
     createSchool() {
       if (this.$refs.formSchool.validate()) {
         if (this.newSchool) {
-          console.log("edited", this.schoolModel);
-          this.$store.dispatch("createSchool", this.schoolModel);
-          this.show = false;
-          this.resetModel();
+          this.$store.dispatch("createSchool", this.school);
+        } else {
+          console.log("update school");
+          var docId = this.school.id;
+          delete this.school.id;
+          this.$store.dispatch("updateSchool", {
+            docId: docId,
+            data: this.school,
+          });
         }
-        else{
-          console.log('update school')
-         // this.$store.dispatch("updateSchool",this.schoolModel)
-        }
+        this.resetModel();
       }
     },
     resetModel() {
-      this.schoolModel = {
+      this.show = false;
+      this.school = {
         name: "",
         cnpj: "",
         qtClasses: 0,
         classes: {},
       };
     },
-  },
-  created() {
-    if (!this.newSchool) {
-      this.schoolModel = Object.assign({}, this.school);
-    }
   },
 };
 </script>
