@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toolbar v-if="$route.path != '/'" />
-    <v-container>
+    <v-container> 
       <v-row class="ma-0 pt-8" align="center">
         <h1>{{ schoolClass.name }}</h1>
       </v-row>
@@ -41,7 +41,7 @@
             </v-text-field>
           </v-col>
         </v-row>
-        <v-data-table
+        <!-- <v-data-table
           :headers="headers"
           :items="filteredStudents"
           :items-per-page="10"
@@ -65,7 +65,7 @@
               </v-btn>
             </v-row>
           </template>
-        </v-data-table>
+        </v-data-table> -->
       </v-card>
     </v-container>
     <student-form
@@ -99,18 +99,17 @@ export default {
         { text: "Nome", value: "name" },
         { text: "", value: "actions", align: "end", sortable: false },
       ],
-      schoolClass: {
-        name: "001",
-        students: [{ name: "001" }, { name: "002" }, { name: "003" }],
-      },
     };
   },
   computed: {
-    filteredStudents() {
-      return this.schoolClass.students.filter((s) => {
-        return s.name.toLowerCase().includes(this.search.toLowerCase());
-      });
-    },
+    // filteredStudents() {
+    //   return this.schoolClass.students.filter((s) => {
+    //     return s.name.toLowerCase().includes(this.search.toLowerCase());
+    //   });
+    // },
+    schoolClass(){
+      return this.$store.state.schoolClass.class
+    }
   },
   methods: {
     deleteStudent(student) {
@@ -120,9 +119,13 @@ export default {
     },
     deleteSchoolClass(){
        if (confirm(`Tem certeza que quer apagar essa turma? Essa ação não pode ser desfeita`)) {
-        console.log("disse sim");
+        this.$store.dispatch('deleteClass',{schoolid: this.$route.params.schoolid, classid: this.$route.params.classid })
+        this.$router.go(-1);
       } else console.log("disse nao");
     }
   },
+  created(){
+    this.$store.dispatch('getClassById',{schoolid: this.$route.params.schoolid, classid: this.$route.params.classid })
+  }
 };
 </script>

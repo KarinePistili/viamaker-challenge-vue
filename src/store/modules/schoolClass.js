@@ -2,38 +2,40 @@ import api from '@/api/index.js'
 
 export default {
     state: {
-        schools: [],
-        school: {},
+        classes: [],
+        class: {}
     },
     mutations: {
-        setSchools(state, payload) {
-            state.schools = payload
+        setClasses(state, payload) {
+            state.classes = payload
         },
-        setSchool(state, payload) {
-            state.school = payload
+        setClass(state, payload) {
+            state.class = payload
         }
+
     },
     actions: {
-        async getSchools({ commit }) {
+        async getClasses({ commit},payload) {
             commit('setLoading', true)
+            console.log('pay',payload)
             try {
-                var snapshot = await api.database.getObjects({ collection: 'schools' })
+                var snapshot = await api.database.getSubDocuments({ collection: 'schools', subCollection: 'classes', docId: payload })
                 var objects = []
                 snapshot.forEach(doc => {
                     objects.push(Object.assign({ id: doc.id }, doc.data()))
                 })
                 console.log('Objects loaded', objects)
-                commit('setSchools', objects)
+                commit('setClasses', objects)
             } catch (err) {
                 console.error("Error getting document:", err);
             } finally {
                 commit('setLoading', false)
             }
         },
-        async createSchool({ commit }, payload) {
+        async createClass({ commit }, payload) {
             commit('setLoading', true)
             try {
-                var docRef = await api.database.createObject({ collection: 'schools', data: payload })
+                var docRef = await api.database.createSubDocument({ collection: 'schools', subCollection: 'classes', docId: payload.schoolid, data: payload.data })
                 console.log("Document successfully created with ID: ", docRef.id);
                 return docRef
             } catch (err) {
@@ -42,21 +44,21 @@ export default {
                 commit('setLoading', false)
             }
         },
-        async getSchoolById({ commit }, payload) {
+        async getClassById({ commit }, payload) {
             commit('setLoading', true)
             try {
-                var doc = await api.database.getObject({ collection: 'schools', docId: payload })
-                commit('setSchool', Object.assign({ id: doc.id }, doc.data()))
+                var doc = await api.database.getSubDocument({ collection: 'schools', subCollection: 'classes', docId: payload.schoolid, subDocId: payload.classid })
+                commit('setClass', Object.assign({ id: doc.id }, doc.data()))
             } catch (err) {
                 console.error("Error getting document:", err);
             } finally {
                 commit('setLoading', false)
             }
         },
-        async updateSchool({ commit }, payload) {
+        async updateClass({ commit }, payload) {
             commit('setLoading', true)
             try {
-                await api.database.updateObject({ collection: 'schools', data: payload.data, docId: payload.docId })
+                await api.database.updateSubDocument({ collection: 'schools', subCollection: 'classes', docId: payload.schoolid, subDocId: payload.classid, data: payload.data })
                 console.log("Document successfully updated: ");
             }
             catch (err) {
@@ -66,10 +68,11 @@ export default {
                 commit('setLoading', false)
             }
         },
-        async deleteSchool({ commit }, payload) {
+        async deleteClass({ commit }, payload) {
+            console.log('payload',payload)
             commit('setLoading', true)
             try {
-                await api.database.deleteObject({collection: 'schools', docId: payload})
+                await api.database.deleteSubDocument({collection: 'schools', docId: payload.schoolid, subCollection: 'classes', subDocId: payload.classid})
                 console.log("Document successfully deleted!");
             } catch (err) {
                 console.error("Error removing document: ", err);
@@ -78,6 +81,7 @@ export default {
             }
 
         }
+
     },
     getters: {
 

@@ -7,7 +7,7 @@
       </v-row>
       <v-divider />
       <v-row class="ma-0 pt-8">
-        <v-btn color="success" class="mr-2 mt-2"
+        <v-btn color="success" class="mr-2 mt-2" @click="editSchoolClass = true"
           >adicionar turma
           <v-icon right>mdi-plus</v-icon>
         </v-btn>
@@ -20,7 +20,7 @@
           <v-icon right>mdi-delete</v-icon>
         </v-btn>
       </v-row>
-      <!-- <v-card class="mt-8 pa-6">
+      <v-card class="mt-8 pa-6">
         <v-row class="ma-0">
           <v-col cols="12" md="8" sm="6">
             <v-card-title class="ml-0 pl-0">Turmas cadastradas</v-card-title>
@@ -49,12 +49,18 @@
             </v-row>
           </template>
         </v-data-table>
-      </v-card> -->
+      </v-card>
     </v-container>
     <school-form
       v-model="editSchool"
       :title="'Editar Escola'"
       :newSchool="false"
+    />
+    <school-class-form
+      v-model="editSchoolClass"
+      :schoolClass="{}"
+      title="Nova turma"
+      :newClass="true"
     />
   </div>
 </template>
@@ -62,16 +68,19 @@
 <script>
 import Toolbar from "@/components/Toolbar.vue";
 import SchoolForm from "@/components/SchoolForm.vue";
+import SchoolClassForm from "@/components/SchoolClassForm.vue";
 
 export default {
   components: {
     Toolbar,
     SchoolForm,
+    SchoolClassForm
   },
   data() {
     return {
       search: "",
       editSchool: false,
+      editSchoolClass: false,
       headers: [
         { text: "Nome", value: "name" },
         { text: "Alunos", value: "qtStudents" },
@@ -80,11 +89,14 @@ export default {
     };
   },
   computed: {
-    // filteredClasses() {
-    //   return this.school.classes.filter((c) => {
-    //     return c.name.toLowerCase().includes(this.search.toLowerCase());
-    //   });
-    // },
+    filteredClasses() {
+      return this.classes.filter((c) => {
+        return c.name.toLowerCase().includes(this.search.toLowerCase());
+      });
+    },
+    classes() {
+      return this.$store.state.schoolClass.classes;
+    },
     school() {
       return this.$store.state.school.school;
     },
@@ -102,12 +114,13 @@ export default {
         )
       ) {
         this.$store.dispatch("deleteSchool", this.$route.params.schoolid);
-        this.$router.go(-1)
+        this.$router.go(-1);
       }
     },
   },
   created() {
     this.$store.dispatch("getSchoolById", this.$route.params.schoolid);
+    this.$store.dispatch("getClasses", this.$route.params.schoolid);
   },
 };
 </script>
