@@ -78,6 +78,10 @@ export default {
           this.show = false;
           this.resetModel();
         }
+        else{
+          console.log('update school')
+         // this.$store.dispatch("updateSchool",this.schoolModel)
+        }
       }
     },
     resetModel() {

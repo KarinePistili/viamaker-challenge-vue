@@ -42,6 +42,18 @@ export default {
             } finally {
                 commit('setLoading', false)
             }
+        },
+        async getSchoolById({commit},payload){
+            commit('setLoading', true)
+            try {
+                var doc = await api.database.getObject({collection: 'schools',docId: payload})
+                commit('setSchool',Object.assign({ id: doc.id }, doc.data()))
+            } catch (err) {
+                console.error("Error getting document:", err);
+            } finally {
+                commit('setLoading', false)
+            }
+
 
         }
     },

@@ -6,9 +6,11 @@ export default {
         var collectionRef = db.collection(payload.collection);
         return collectionRef.add(payload.data)    
     },
-    getObjectById: async () => {
-        // TO DO   
-    },
+    getObject: async (payload) => {
+        const db = firebase.firestore();
+        var collectionRef = db.collection(payload.collection);
+        return collectionRef.doc(payload.docId).get()
+      },    
     deleteDocument: async () => {
         // TO DO
     },

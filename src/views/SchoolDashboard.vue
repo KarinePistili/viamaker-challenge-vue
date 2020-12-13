@@ -18,6 +18,7 @@
           color="blue"
           class="mt-2 mr-2"
           dark
+          @click="editSchool = true"
           >editar escola
           <v-icon right>mdi-pencil</v-icon>
         </v-btn>
@@ -26,7 +27,7 @@
           <v-icon right>mdi-delete</v-icon>
         </v-btn>
       </v-row>
-      <v-card class="mt-8 pa-6">
+      <!-- <v-card class="mt-8 pa-6">
         <v-row class="ma-0">
           <v-col cols="12" md="8" sm="6">
             <v-card-title class="ml-0 pl-0">Turmas cadastradas</v-card-title>
@@ -55,45 +56,46 @@
             </v-row>
           </template>
         </v-data-table>
-      </v-card>
+      </v-card> -->
     </v-container>
+    <school-form
+      v-model="editSchool"
+      :school="school"
+      :title="'Editar Escola'"
+      :newSchool="false"
+    />
   </div>
 </template>
 
 <script>
 import Toolbar from "@/components/Toolbar.vue";
+import SchoolForm from "@/components/SchoolForm.vue";
 
 export default {
   components: {
     Toolbar,
+    SchoolForm
   },
   data() {
     return {
       search: "",
+      editSchool:false,
       headers: [
         { text: "Nome", value: "name" },
         { text: "Alunos", value: "qtStudents" },
         { text: "", value: "actions", align: "end", sortable: false },
       ],
-      school: {
-        id: "001",
-        name: "Escola 01",
-        cnpj: "123456789",
-        qtClasses: 3,
-        classes: [
-          { id: "001", name: "3A", qtStudents: 30 },
-          { id: "002", name: "4B", qtStudents: 40 },
-          { id: "003", name: "13", qtStudents: 15 },
-        ],
-      },
     };
   },
   computed: {
-    filteredClasses() {
-      return this.school.classes.filter((c) => {
-        return c.name.toLowerCase().includes(this.search.toLowerCase());
-      });
-    },
+    // filteredClasses() {
+    //   return this.school.classes.filter((c) => {
+    //     return c.name.toLowerCase().includes(this.search.toLowerCase());
+    //   });
+    // },
+    school(){
+      return this.$store.state.school.school
+    }
   },
   methods: {
     manageClass(schoolClass) {
@@ -102,5 +104,8 @@ export default {
       );
     },
   },
+  created(){
+    this.$store.dispatch('getSchoolById',this.$route.params.schoolid )
+  }
 };
 </script>
