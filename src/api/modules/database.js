@@ -50,5 +50,10 @@ export default {
         const db = firebase.firestore();
         var collectionRef = db.collection(payload.collection).doc(payload.docId).collection(payload.subCollection)
         return collectionRef.doc(payload.subDocId).delete()
+    },
+    queryDocuments: async(payload) =>{
+        const db = firebase.firestore()
+        var collectionRef = db.collection(payload.collection).where(payload.filter[0],payload.filter[1], payload.filter[2])
+        return collectionRef.get()
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toolbar v-if="$route.path != '/'" />
-    <v-container> 
+    <v-container>
       <v-row class="ma-0 pt-8" align="center">
         <h1>{{ schoolClass.name }}</h1>
       </v-row>
@@ -13,11 +13,16 @@
           @click="
             editStudent = true;
             studentFormTitle = 'Novo aluno';
+            newStudent = true
           "
           >adicionar aluno
           <v-icon right>mdi-plus</v-icon>
         </v-btn>
-        <v-btn color="blue" class="mt-2 mr-2" dark @click="editSchoolClass = true"
+        <v-btn
+          color="blue"
+          class="mt-2 mr-2"
+          dark
+          @click="editSchoolClass = true"
           >editar turma
           <v-icon right>mdi-pencil</v-icon>
         </v-btn>
@@ -41,7 +46,7 @@
             </v-text-field>
           </v-col>
         </v-row>
-        <!-- <v-data-table
+        <v-data-table
           :headers="headers"
           :items="filteredStudents"
           :items-per-page="10"
@@ -56,6 +61,7 @@
                   editStudent = true;
                   selectedStudent = item;
                   studentFormTitle = 'Editar aluno';
+                  newStudent = false
                 "
               >
                 <v-icon>mdi-pencil</v-icon>
@@ -65,15 +71,20 @@
               </v-btn>
             </v-row>
           </template>
-        </v-data-table> -->
+        </v-data-table>
       </v-card>
     </v-container>
     <student-form
       v-model="editStudent"
       :student="selectedStudent"
       :title="studentFormTitle"
+      :newStudent="newStudent"
     />
-    <school-class-form v-model="editSchoolClass" :schoolClass="schoolClass" title="Editar turma" />
+    <school-class-form
+      v-model="editSchoolClass"
+      :schoolClass="schoolClass"
+      title="Editar turma"
+    />
   </div>
 </template>
 
@@ -95,6 +106,7 @@ export default {
       studentFormTitle: "",
       editSchoolClass: false,
       selectedStudent: {},
+      newStudent: false,
       headers: [
         { text: "Nome", value: "name" },
         { text: "", value: "actions", align: "end", sortable: false },
@@ -102,30 +114,44 @@ export default {
     };
   },
   computed: {
-    // filteredStudents() {
-    //   return this.schoolClass.students.filter((s) => {
-    //     return s.name.toLowerCase().includes(this.search.toLowerCase());
-    //   });
-    // },
-    schoolClass(){
-      return this.$store.state.schoolClass.class
-    }
+    filteredStudents() {
+      return this.students.filter((s) => {
+        return s.name.toLowerCase().includes(this.search.toLowerCase());
+      });
+    },
+    students() {
+      return this.$store.state.student.students;
+    },
+    schoolClass() {
+      return this.$store.state.schoolClass.class;
+    },
   },
   methods: {
     deleteStudent(student) {
       if (confirm(`Tem certeza que quer apagar ${student.name} dessa turma?`)) {
-        console.log("disse sim");
+        this.$store.dispatch('deleteStudent',student.id)
       } else console.log("disse nao");
     },
-    deleteSchoolClass(){
-       if (confirm(`Tem certeza que quer apagar essa turma? Essa ação não pode ser desfeita`)) {
-        this.$store.dispatch('deleteClass',{schoolid: this.$route.params.schoolid, classid: this.$route.params.classid })
+    deleteSchoolClass() {
+      if (
+        confirm(
+          `Tem certeza que quer apagar essa turma? Essa ação não pode ser desfeita`
+        )
+      ) {
+        this.$store.dispatch("deleteClass", {
+          schoolid: this.$route.params.schoolid,
+          classid: this.$route.params.classid,
+        });
         this.$router.go(-1);
       } else console.log("disse nao");
-    }
+    },
   },
-  created(){
-    this.$store.dispatch('getClassById',{schoolid: this.$route.params.schoolid, classid: this.$route.params.classid })
-  }
+  created() {
+    this.$store.dispatch("getClassById", {
+      schoolid: this.$route.params.schoolid,
+      classid: this.$route.params.classid,
+    });
+    this.$store.dispatch("getStudentsFromClass", this.$route.params.classid);
+  },
 };
 </script>

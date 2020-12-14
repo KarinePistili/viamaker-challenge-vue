@@ -12,21 +12,21 @@
           </v-btn>
         </v-row>
         <v-row class="ma-0 pl-4 pr-4">
-          <v-card-title class="pl-0"> {{title}} </v-card-title>
+          <v-card-title class="pl-0"> {{ title }} </v-card-title>
         </v-row>
         <v-form ref="formStudent">
-            <v-row class="ma-0 pl-4 pr-4">
-        <v-text-field
-          outlined
-          placeholder="Nome"
-          v-model="editedStudent.name"
-          :rules="rules.name"
-        ></v-text-field>
-            </v-row>
+          <v-row class="ma-0 pl-4 pr-4">
+            <v-text-field
+              outlined
+              placeholder="Nome"
+              v-model="editedStudent.name"
+              :rules="rules.name"
+            ></v-text-field>
+          </v-row>
         </v-form>
         <v-row class="ma-0 pl-4 pr-4" justify="space-between">
-            <v-btn color="red" text @click="show = false;">cancelar</v-btn>
-            <v-btn color="success" @click="updateStudent()">salvar</v-btn>
+          <v-btn color="red" text @click="show = false">cancelar</v-btn>
+          <v-btn color="success" @click="saveStudent()">salvar</v-btn>
         </v-row>
       </v-card>
     </v-dialog>
@@ -35,12 +35,12 @@
 
 <script>
 export default {
-  props: ["value", "student", "title"],
+  props: ["value", "student", "title", "newStudent"],
   data() {
     return {
-      rules:{
-          name:[(v) => !!v || "Nome é obrigatório"]
-      }
+      rules: {
+        name: [(v) => !!v || "Nome é obrigatório"],
+      },
     };
   },
   computed: {
@@ -52,15 +52,19 @@ export default {
         this.$emit("input", value);
       },
     },
-    editedStudent(){
-        return Object.assign({}, this.student);
-    }
+    editedStudent() {
+      return Object.assign({}, this.student);
+    },
   },
-  methods:{
-      updateStudent(){
-          if(this.$refs.formStudent.validate())
-            console.log('Update Student',this.editedStudent)
+  methods: {
+    saveStudent() {
+      if (this.$refs.formStudent.validate()) {
+        if (this.newStudent) {
+          this.editedStudent.classId = this.$route.params.classid
+          this.$store.dispatch("createStudent", this.editedStudent);
+        }
       }
+    },
   },
 };
 </script>
