@@ -1,9 +1,12 @@
 <template>
   <div>
-    <Toolbar v-if="$route.path != '/'" />
+    <Toolbar/>
     <v-container>
       <v-row class="ma-0 pt-8" align="center">
         <h1>{{ school.name }}</h1>
+      </v-row>
+      <v-row class="ma-0">
+        <p class="subtitle-1">CNPJ: {{school.cnpj}}</p>
       </v-row>
       <v-divider />
       <v-row class="ma-0 pt-8">

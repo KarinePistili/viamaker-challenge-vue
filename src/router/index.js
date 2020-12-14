@@ -6,6 +6,7 @@ import SuperDashboard from '@/views/SuperAdminDashboard.vue'
 import SchoolDashboard from '@/views/SchoolDashboard.vue'
 import ManageSchools from '@/views/ManageSchools.vue'
 import SchoolClass from '@/views/SchoolClass.vue'
+import store from '@/store/index'
 
 Vue.use(VueRouter)
 
@@ -23,22 +24,55 @@ const routes = [
   {
     path: '/super-dashboard',
     name: 'SuperDashboard',
-    component: SuperDashboard
+    component: SuperDashboard,
+    beforeEnter: (to, from, next) =>{
+      if(store.state.auth.user == null){
+        next('/login')
+      }
+      else{
+        next()
+      }
+    }
+
   },
   {
     path: '/school-dashboard/:schoolid',
     name: 'SchoolDashboard',
-    component: SchoolDashboard
+    component: SchoolDashboard,
+    beforeEnter: (to, from, next) =>{
+      if(store.state.auth.user == null){
+        next('/login')
+      }
+      else{
+        next()
+      }
+    }
   },
   {
     path: '/super-dashboard/schools',
     name: 'ManageSchools',
-    component: ManageSchools
+    component: ManageSchools,
+    beforeEnter: (to, from, next) =>{
+      if(store.state.auth.user == null){
+        next('/login')
+      }
+      else{
+        next()
+      }
+    }
   },
   {
     path: '/school-dashboard/:schoolid/class/:classid',
     name: 'ManageClass',
-    component: SchoolClass
+    component: SchoolClass,
+    beforeEnter: (to, from, next) =>{
+      if(store.state.auth.user == null){
+        next('/login')
+      }
+      else{
+        next()
+      }
+    }
   },
 ]
 

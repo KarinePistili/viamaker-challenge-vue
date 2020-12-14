@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <Toolbar v-if="$route.path != '/'" />
+    <Toolbar/>
     <v-container fill-height>
       <v-row justify="center">
         <v-col cols="12" lg="6" xl="6" md="6">
@@ -122,10 +122,10 @@ export default {
     logIn() {
       if (this.$refs.login.validate()) {
         console.log("login valid");
-        this.$store.dispatch("signin", this.user).th;
+        this.$store.dispatch("signin", this.user);
 
         // for now it will always go to the super admin dashboard
-        this.$router.push("/super-dashboard");
+        this.$router.push("/");
       }
     },
     sendQuestion() {

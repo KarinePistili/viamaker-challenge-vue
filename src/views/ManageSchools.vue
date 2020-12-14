@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Toolbar v-if="$route.path != '/'" />
+    <Toolbar/>
     <v-container>
       <v-row class="ma-0 pt-8">
         <h1>Gerenciar escolas</h1>

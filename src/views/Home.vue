@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <Toolbar/>
     <v-row justify="end" :class="{'pa-12': $vuetify.breakpoint.mdAndUp, 'pa-5':$vuetify.breakpoint.smAndDown}">
       <v-col cols="12" lg="6" xl="6" md="6" sm="12" xs="12">
         <v-card flat class="pa-4">
@@ -15,7 +16,7 @@
           </v-list>
           <v-card-actions>
             <v-row justify="end" class="ma-0 hidden-sm-and-down">
-              <v-btn dark @click="$router.push('/login')">
+              <v-btn dark @click="$router.push('/super-dashboard')">
                   Gerencie sua escola
                 <v-icon right>mdi-school</v-icon>
               </v-btn>
@@ -72,7 +73,11 @@
 </style>
 
 <script>
+import Toolbar from "@/components/Toolbar.vue";
 export default {
+  components:{
+    Toolbar
+  },
   data() {
     return {
       smallDesc:

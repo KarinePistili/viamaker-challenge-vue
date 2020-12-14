@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Toolbar v-if="$route.path != '/'" />
+    <Toolbar/>
     <v-container>
       <v-row class="ma-0 pt-8">
         <h1>Benvindo Super Admin!</h1>
@@ -61,6 +61,8 @@ export default {
       console.log("manage");
       if(action == 'manage-schools')
         this.$router.push('/super-dashboard/schools')
+      else if(action == 'manage-users')
+        alert('Ops! Essa funcionalidade estará disponível em breve.')
     },
   },
 };

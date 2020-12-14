@@ -1,7 +1,12 @@
 <template>
   <div>
-    <Toolbar v-if="$route.path != '/'" />
+    <Toolbar/>
     <v-container>
+            <v-row>
+        <v-btn @click="$router.go(-1)" text>
+          <v-icon left>mdi-arrow-left</v-icon>
+          Voltar para a escola</v-btn>
+      </v-row>
       <v-row class="ma-0 pt-8" align="center">
         <h1>{{ schoolClass.name }}</h1>
       </v-row>
