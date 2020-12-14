@@ -54,7 +54,10 @@ export default {
       },
       rules: {
         name: [(v) => !!v || "Nome é obrigatório"],
-        cnpj: [(v) => !!v || "CNPJ é obrigatório"],
+        cnpj: [
+          (v) => !!v || "CNPJ é obrigatório",
+          (v) => v.length == 14 || "CNPJ precisa ter 14 dígitos",
+        ],
       },
     };
   },
@@ -71,7 +74,7 @@ export default {
       if (!this.newSchool) {
         return Object.assign({}, this.$store.state.school.school);
       }
-      return this.schoolModel
+      return this.schoolModel;
     },
   },
   methods: {
