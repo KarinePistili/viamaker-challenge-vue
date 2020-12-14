@@ -34,7 +34,7 @@
         </v-form>
         <v-row class="ma-0 pl-4 pr-4" justify="space-between">
           <v-btn color="red" text @click="resetModel">cancelar</v-btn>
-          <v-btn color="success" @click="createSchool()">salvar</v-btn>
+          <v-btn color="success" @click="saveSchool()">salvar</v-btn>
         </v-row>
       </v-card>
     </v-dialog>
@@ -78,7 +78,7 @@ export default {
     },
   },
   methods: {
-    createSchool() {
+    saveSchool() {
       if (this.$refs.formSchool.validate()) {
         if (this.newSchool) {
           this.$store.dispatch("createSchool", this.school);

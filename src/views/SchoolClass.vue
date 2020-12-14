@@ -1,11 +1,12 @@
 <template>
   <div>
-    <Toolbar/>
+    <Toolbar />
     <v-container>
-            <v-row>
+      <v-row>
         <v-btn @click="$router.go(-1)" text>
           <v-icon left>mdi-arrow-left</v-icon>
-          Voltar para a escola</v-btn>
+          Voltar para a escola</v-btn
+        >
       </v-row>
       <v-row class="ma-0 pt-8" align="center">
         <h1>{{ schoolClass.name }}</h1>
@@ -58,17 +59,7 @@
         >
           <template v-slot:item.actions="{ item }">
             <v-row justify="end" class="mr-2">
-              <v-btn
-                color="black"
-                small
-                icon
-                @click="
-                  editStudent = true;
-                  selectedStudent = item;
-                  studentFormTitle = 'Editar aluno';
-                  newStudent = false;
-                "
-              >
+              <v-btn color="black" small icon @click="updateStudent(item)">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-btn color="red" small icon @click="deleteStudent(item)">
@@ -153,6 +144,13 @@ export default {
         });
         this.$router.go(-1);
       } else console.log("disse nao");
+    },
+    updateStudent(student) {
+      this.editStudent = true;
+      this.selectedStudent = student;
+      this.studentFormTitle = "Editar aluno";
+      this.newStudent = false;
+      this.$store.commit("setStudent", student);
     },
   },
   created() {

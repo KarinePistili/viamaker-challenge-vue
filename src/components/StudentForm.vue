@@ -41,6 +41,10 @@ export default {
       rules: {
         name: [(v) => !!v || "Nome é obrigatório"],
       },
+      studentModel:{
+        name: '',
+        classId: ''
+      }
     };
   },
   computed: {
@@ -53,7 +57,10 @@ export default {
       },
     },
     editedStudent() {
-      return Object.assign({}, this.student);
+      if (!this.newStudent) {
+        return Object.assign({}, this.$store.state.student.student);
+      }
+      return this.studentModel;
     },
   },
   methods: {
@@ -79,6 +86,10 @@ export default {
     },
     reset() {
       this.show = false;
+      this.editedStudent = {
+        name: '',
+        classId: ''
+      }
     },
   },
 };

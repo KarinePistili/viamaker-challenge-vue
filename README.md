@@ -10,6 +10,8 @@ Foi utilizado o Firebase como banco de dados e serviço de autenticação, e o s
 - Auto login
 - Melhorar usabilidade. Talvez alguns usuários fiquem perdidos, seria preciso estudar e talvez modifciar a navegação entre páginas
 - Substituir os mock texts (famoso lorem ipsum) por dados mais realistas
+- Implementar sistema de recuperação de senha
+- Sistema para envio de perguntas/interesse
 
 ## Project setup
 ```
