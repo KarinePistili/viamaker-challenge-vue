@@ -17,11 +17,7 @@ export default {
         async getStudentsFromClass({ commit },payload){
             commit('setLoading', true)
             try {
-                var snapshot = await api.database.queryDocuments({ collection: 'students', filter:['classId','==',payload] })
-                var objects = []
-                snapshot.forEach(doc => {
-                    objects.push(Object.assign({ id: doc.id }, doc.data()))
-                })
+                var objects = await api.database.queryDocuments({ collection: 'students', filter:['classId','==',payload] })
                 console.log('Objects loaded', objects)
                 commit('setStudents', objects)
             } catch (err) {

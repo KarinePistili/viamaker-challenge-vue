@@ -1,4 +1,5 @@
 import api from '@/api/index.js'
+import firebase from 'firebase'
 
 export default {
     state: {
@@ -15,15 +16,10 @@ export default {
 
     },
     actions: {
-        async getClasses({ commit},payload) {
+        async getClasses({ commit }, payload) {
             commit('setLoading', true)
-            console.log('pay',payload)
             try {
-                var snapshot = await api.database.getSubDocuments({ collection: 'schools', subCollection: 'classes', docId: payload })
-                var objects = []
-                snapshot.forEach(doc => {
-                    objects.push(Object.assign({ id: doc.id }, doc.data()))
-                })
+                var objects = await api.database.getSubDocuments({ collection: 'schools', subCollection: 'classes', docId: payload })
                 console.log('Objects loaded', objects)
                 commit('setClasses', objects)
             } catch (err) {
@@ -47,8 +43,12 @@ export default {
         async getClassById({ commit }, payload) {
             commit('setLoading', true)
             try {
-                var doc = await api.database.getSubDocument({ collection: 'schools', subCollection: 'classes', docId: payload.schoolid, subDocId: payload.classid })
-                commit('setClass', Object.assign({ id: doc.id }, doc.data()))
+                const db = firebase.firestore();
+                db.collection('schools').doc(payload.schoolid).collection('classes').doc(payload.classid)
+                    .onSnapshot(function (doc) {
+                        commit('setClass', Object.assign({ id: doc.id }, doc.data()))
+                    })
+
             } catch (err) {
                 console.error("Error getting document:", err);
             } finally {
@@ -69,10 +69,10 @@ export default {
             }
         },
         async deleteClass({ commit }, payload) {
-            console.log('payload',payload)
+            console.log('payload', payload)
             commit('setLoading', true)
             try {
-                await api.database.deleteSubDocument({collection: 'schools', docId: payload.schoolid, subCollection: 'classes', subDocId: payload.classid})
+                await api.database.deleteSubDocument({ collection: 'schools', docId: payload.schoolid, subCollection: 'classes', subDocId: payload.classid })
                 console.log("Document successfully deleted!");
             } catch (err) {
                 console.error("Error removing document: ", err);

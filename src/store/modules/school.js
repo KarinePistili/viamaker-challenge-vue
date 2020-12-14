@@ -1,4 +1,5 @@
 import api from '@/api/index.js'
+import firebase from 'firebase'
 
 export default {
     state: {
@@ -17,11 +18,7 @@ export default {
         async getSchools({ commit }) {
             commit('setLoading', true)
             try {
-                var snapshot = await api.database.getObjects({ collection: 'schools' })
-                var objects = []
-                snapshot.forEach(doc => {
-                    objects.push(Object.assign({ id: doc.id }, doc.data()))
-                })
+                var objects = await api.database.getObjects({ collection: 'schools' })
                 console.log('Objects loaded', objects)
                 commit('setSchools', objects)
             } catch (err) {
@@ -45,8 +42,12 @@ export default {
         async getSchoolById({ commit }, payload) {
             commit('setLoading', true)
             try {
-                var doc = await api.database.getObject({ collection: 'schools', docId: payload })
-                commit('setSchool', Object.assign({ id: doc.id }, doc.data()))
+                const db = firebase.firestore();
+                db.collection('schools').doc(payload)
+                    .onSnapshot(function (doc) {
+                        commit('setSchool', Object.assign({ id: doc.id }, doc.data()))
+                    })
+                
             } catch (err) {
                 console.error("Error getting document:", err);
             } finally {
@@ -69,7 +70,7 @@ export default {
         async deleteSchool({ commit }, payload) {
             commit('setLoading', true)
             try {
-                await api.database.deleteObject({collection: 'schools', docId: payload})
+                await api.database.deleteObject({ collection: 'schools', docId: payload })
                 console.log("Document successfully deleted!");
             } catch (err) {
                 console.error("Error removing document: ", err);
