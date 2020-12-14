@@ -61,7 +61,11 @@ export default {
       if (this.$refs.formStudent.validate()) {
         if (this.newStudent) {
           this.editedStudent.classId = this.$route.params.classid;
-          this.$store.dispatch("createStudent", this.editedStudent);
+          this.$store.dispatch("createStudent", {
+            data: this.editedStudent,
+            schoolid: this.$route.params.schoolid,
+            classid: this.$route.params.classid,
+          });
         } else {
           var id = this.editedStudent.id;
           delete this.editedStudent.id;
@@ -70,12 +74,12 @@ export default {
             docId: id,
           });
         }
-        this.reset()
+        this.reset();
       }
     },
-    reset(){
-      this.show = false
-    }
+    reset() {
+      this.show = false;
+    },
   },
 };
 </script>

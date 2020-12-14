@@ -21,7 +21,7 @@
               </v-btn>
             </v-row>
             <v-row justify="center" class="ma-0 hidden-md-and-up">
-              <v-btn dark @click="$router.push('/login')">
+              <v-btn dark @click="$router.push('/super-dashboard')">
                 Gerencie sua escola
                 <v-icon right>mdi-school</v-icon>
               </v-btn>

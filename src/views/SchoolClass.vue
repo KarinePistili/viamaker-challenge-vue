@@ -13,7 +13,7 @@
           @click="
             editStudent = true;
             studentFormTitle = 'Novo aluno';
-            newStudent = true
+            newStudent = true;
           "
           >adicionar aluno
           <v-icon right>mdi-plus</v-icon>
@@ -61,7 +61,7 @@
                   editStudent = true;
                   selectedStudent = item;
                   studentFormTitle = 'Editar aluno';
-                  newStudent = false
+                  newStudent = false;
                 "
               >
                 <v-icon>mdi-pencil</v-icon>
@@ -129,7 +129,11 @@ export default {
   methods: {
     deleteStudent(student) {
       if (confirm(`Tem certeza que quer apagar ${student.name} dessa turma?`)) {
-        this.$store.dispatch('deleteStudent',student.id)
+        this.$store.dispatch("deleteStudent", {
+          docId: student.id,
+          schoolid: this.$route.params.schoolid,
+          classid: this.$route.params.classid,
+        });
       } else console.log("disse nao");
     },
     deleteSchoolClass() {
