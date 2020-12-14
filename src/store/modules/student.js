@@ -30,7 +30,8 @@ export default {
         async deleteStudent({ commit }, payload) {
             commit('setLoading', true)
             try {
-                await api.database.deleteObject({ collection: 'students', docId: payload.docID })
+                console.log('payload',payload)
+                await api.database.deleteObject({ collection: 'students', docId: payload.docId })
                 console.log("Document successfully deleted!");
                 const db = firebase.firestore()
                 db.collection('schools').doc(payload.schoolid).collection('classes').doc(payload.classid).update({
