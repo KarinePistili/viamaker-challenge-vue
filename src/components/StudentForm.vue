@@ -7,7 +7,7 @@
     >
       <v-card class="pa-6">
         <v-row justify="end" class="ma-0">
-          <v-btn @click="show = false" icon>
+          <v-btn @click="reset" icon>
             <v-icon color="red">mdi-close</v-icon>
           </v-btn>
         </v-row>
@@ -25,7 +25,7 @@
           </v-row>
         </v-form>
         <v-row class="ma-0 pl-4 pr-4" justify="space-between">
-          <v-btn color="red" text @click="show = false">cancelar</v-btn>
+          <v-btn color="red" text @click="reset">cancelar</v-btn>
           <v-btn color="success" @click="saveStudent()">salvar</v-btn>
         </v-row>
       </v-card>
@@ -60,11 +60,22 @@ export default {
     saveStudent() {
       if (this.$refs.formStudent.validate()) {
         if (this.newStudent) {
-          this.editedStudent.classId = this.$route.params.classid
+          this.editedStudent.classId = this.$route.params.classid;
           this.$store.dispatch("createStudent", this.editedStudent);
+        } else {
+          var id = this.editedStudent.id;
+          delete this.editedStudent.id;
+          this.$store.dispatch("updateStudent", {
+            data: this.editedStudent,
+            docId: id,
+          });
         }
+        this.reset()
       }
     },
+    reset(){
+      this.show = false
+    }
   },
 };
 </script>

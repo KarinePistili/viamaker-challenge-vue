@@ -53,6 +53,19 @@ export default {
                 commit('setLoading', false)
             }
         },
+        async updateStudent({ commit }, payload) {
+            commit('setLoading', true)
+            try {
+                await api.database.updateObject({ collection: 'students', data: payload.data, docId: payload.docId })
+                console.log("Document successfully updated: ");
+            }
+            catch (err) {
+                console.error("Error", err)
+            }
+            finally {
+                commit('setLoading', false)
+            }
+        },
 
     },
     getter:{
