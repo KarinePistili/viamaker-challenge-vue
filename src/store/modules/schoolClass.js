@@ -33,6 +33,14 @@ export default {
             try {
                 var docRef = await api.database.createSubDocument({ collection: 'schools', subCollection: 'classes', docId: payload.schoolid, data: payload.data })
                 console.log("Document successfully created with ID: ", docRef.id);
+                const db = firebase.firestore()
+                db.collection('schools').doc(payload.schoolid).update({
+                    qtClasses: firebase.firestore.FieldValue.increment(1)
+                }).then(() =>{
+                    console.log('Sucessfully incremented field')
+                }).catch((error) =>{
+                    console.log(error)
+                })
                 return docRef
             } catch (err) {
                 console.error("Error", err)
@@ -74,6 +82,14 @@ export default {
             try {
                 await api.database.deleteSubDocument({ collection: 'schools', docId: payload.schoolid, subCollection: 'classes', subDocId: payload.classid })
                 console.log("Document successfully deleted!");
+                const db = firebase.firestore()
+                db.collection('schools').doc(payload.schoolid).update({
+                    qtClasses: firebase.firestore.FieldValue.increment(-1)
+                }).then(() =>{
+                    console.log('Sucessfully decremented field')
+                }).catch((error) =>{
+                    console.log(error)
+                })
             } catch (err) {
                 console.error("Error removing document: ", err);
             } finally {
